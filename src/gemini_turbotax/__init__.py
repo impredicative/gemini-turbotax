@@ -35,6 +35,13 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
         df_gemini.drop(df_gemini[gemini_unsupported_types_mask].index, inplace=True)
         warnings.warn(f'Skipped {num_gemini_unsupported_type_rows} rows with unsupported types from the Gemini file, keeping {len(df_gemini)} rows. The supported types are: {", ".join(gemini_supported_types)}')
 
+    gemini_supported_symbol_suffix = 'USD'
+    gemini_unsupported_symbol_mask = ~df_gemini['Symbol'].str.endswith(gemini_supported_symbol_suffix)
+    num_gemini_unsupported_symbol_rows = gemini_unsupported_symbol_mask.sum()
+    if num_gemini_unsupported_symbol_rows:
+        df_gemini.drop(df_gemini[gemini_unsupported_symbol_mask].index, inplace=True)
+        warnings.warn(f'Skipped {num_gemini_unsupported_symbol_rows} rows with unsupported symbols from the Gemini file, keeping {len(df_gemini)} rows. Only symbols ending in {gemini_supported_symbol_suffix} are supported.')
+
     # Validate Gemini dataframe
     if df_gemini.empty:
         warnings.warn(f'Aborting because there are no Gemini rows to convert.')
