@@ -7,12 +7,13 @@ authors = [
 ]
 dependencies = [
     "pandas>=2.0.3",
+    "fire>=0.5.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.12"
 
 [project.scripts]
-hello = "gemini_turbotax:hello"
+convert = "gemini_turbotax:main"
 
 [build-system]
 requires = ["hatchling"]
