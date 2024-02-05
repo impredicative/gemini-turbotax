@@ -17,6 +17,8 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
         warnings.filterwarnings("ignore", category=UserWarning, module=re.escape('openpyxl.styles.stylesheet'))
         df_gemini = pd.read_excel(input_path, engine='openpyxl')
 
+    df_gemini.dropna(subset='Date', inplace=True)  # Removes last row which just has "USD Balance USD".
+
 
 def main() -> None:  # Used as target by pyproject.toml
     fire.Fire(convert)
