@@ -1,0 +1,12 @@
+Date,Type,Sent Asset,Sent Amount,Received Asset,Received Amount,Fee Asset,Fee Amount,Market Value Currency,Market Value,Description,Transaction Hash,Transaction ID
+9/20/2022 23:33,Buy,USD,5000,BTC,0.25,USD,2.99,USD,5002.99,buy BTC on exchange,,255cef42-e04f-5a46-8885-b318fd4724ec
+10/1/2022 15:21,Sale,BTC,0.2,USD,4500,USD,1.5,USD,4498.5,sold BTC on exchange,,
+11/5/2022 10:11,Convert,BTC,0.05,ETH,1,USD,2.5,,,Converted BTC to ETH on exchange,,
+2/1/2022 5:45,Income,,,ETH,1,,,,,Received 1 BTC for work done,,
+12/1/2022 15:22,Rewards,,,ETH,0.005,,,,,,,
+6/23/2022 15:21,Expense,ETH,0.1,,,,,,,,,
+10/15/2022 23:23,Deposit,,,BTC,1,,,,,received 1 BTC from BTC wallet,,
+9/15/2022 9:21,Mining,,,BTC,0.0000025,,,,,,,
+10/15/2022 23:23,Withdrawal,BTC,1,,,,,,,Sent 1 BTC from BTC wallet to exchange,,
+12/23/2022 23:15,Stake,,,0.05,ETH,,,,,received .05 ETH from staking rewards,0x12345abcde,
+*Please delete all example data above before modifying this document. The article at https://ttlc.intuit.com/turbotax-support/en-us/help-article/cryptocurrency/create-csv-file-unsupported-source/L1yhp71Nt_US_en_US?uid=lf0b1p58 details all TurboTax CSV supported types.,,,,,,,,,,,,
