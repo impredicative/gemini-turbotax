@@ -24,13 +24,20 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
 
     # Cleanup Gemini dataframe
     num_gemini_na_rows = df_gemini['Date'].isna().sum()
-    df_gemini.dropna(subset='Date', inplace=True)  # Removes last row which just has "USD Balance USD".
     if num_gemini_na_rows > 0:
-        warnings.warn(f'Skipped {num_gemini_na_rows} empty rows from the Gemini file, leaving {len(df_gemini)} rows.')
+        df_gemini.dropna(subset='Date', inplace=True)  # Removes last row which just has "USD Balance USD".
+        warnings.warn(f'Skipped {num_gemini_na_rows} empty rows from the Gemini file, keeping {len(df_gemini)} rows.')
+
+    gemini_supported_types = ['Buy', 'Sell']
+    gemini_unsupported_types_mask = ~df_gemini['Type'].isin(gemini_supported_types)
+    num_gemini_unsupported_type_rows = gemini_unsupported_types_mask.sum()
+    if num_gemini_unsupported_type_rows > 0:
+        df_gemini.drop(df_gemini[gemini_unsupported_types_mask].index, inplace=True)
+        warnings.warn(f'Skipped {num_gemini_unsupported_type_rows} rows with unsupported types from the Gemini file, keeping {len(df_gemini)} rows. The supported types are: {", ".join(gemini_supported_types)}')
 
     # Validate Gemini dataframe
     if df_gemini.empty:
-        warnings.warn(f'Aborting because there are no Gemini rows.')
+        warnings.warn(f'Aborting because there are no Gemini rows to convert.')
         return
 
     # Create TurboTax dataframe
