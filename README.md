@@ -12,4 +12,6 @@ rye run convert --input-path=~/Downloads/transaction_history.xlsx --output-path=
 ```
 
 ## Limitations
-* Grow transaction history is not supported.
+* **Grow** transaction history file is not supported.
+* **Type** column: Only "Buy" and "Sell" values are supported. Others are skipped.
+* **Symbol** column: Only values ending in "USD" are supported. Others are skipped.
