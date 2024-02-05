@@ -22,7 +22,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
         df_gemini = pd.read_excel(input_path, engine='openpyxl')
     print(f'Read Gemini file with {len(df_gemini)} rows.')
 
-    # Cleanup Gemini dataframe
+    # Filter Gemini dataframe
     num_gemini_na_rows = df_gemini['Date'].isna().sum()
     if num_gemini_na_rows > 0:
         df_gemini.dropna(subset='Date', inplace=True)  # Removes last row which just has "USD Balance USD".
@@ -47,11 +47,16 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
         warnings.warn('Aborting because there are no Gemini rows to convert.')
         return
 
+    # Enhance Gemini dataframe
+    df_gemini['Symbol Prefix'] = df_gemini['Symbol'].str.removesuffix(gemini_supported_symbol_suffix)
+    df_gemini['Symbol Prefix Amount'] = df_gemini.apply(lambda row: row[row['Symbol Prefix'] + ' Amount ' + row['Symbol Prefix']], axis=1).round(8)
+
     # Create TurboTax dataframe
     df_turbotax = pd.DataFrame()
     df_turbotax['Date'] = df_gemini['Time (UTC)']
     df_turbotax['Type'] = df_gemini['Type'].replace('Sell', 'Sale')
-    df_turbotax['Sent Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), gemini_supported_symbol_suffix), (lambda s: s.eq('Sell'), df_gemini['Symbol'].str.removesuffix(gemini_supported_symbol_suffix))])
+    df_turbotax['Sent Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), gemini_supported_symbol_suffix), (lambda s: s.eq('Sell'), df_gemini['Symbol Prefix'])])
+    df_turbotax['Sent Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), -df_gemini['USD Amount USD']), (lambda s: s.eq('Sell'), -df_gemini['Symbol Prefix Amount'])])
 
 
 def main() -> None:  # Used as target by pyproject.toml
