@@ -51,6 +51,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     df_turbotax = pd.DataFrame()
     df_turbotax['Date'] = df_gemini['Time (UTC)']
     df_turbotax['Type'] = df_gemini['Type'].replace('Sell', 'Sale')
+    df_turbotax['Sent Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), gemini_supported_symbol_suffix), (lambda s: s.eq('Sell'), df_gemini['Symbol'].str.removesuffix(gemini_supported_symbol_suffix))])
 
 
 def main() -> None:  # Used as target by pyproject.toml
