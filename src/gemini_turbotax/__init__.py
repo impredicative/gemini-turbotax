@@ -44,7 +44,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
 
     # Validate Gemini dataframe
     if df_gemini.empty:
-        warnings.warn(f'Aborting because there are no Gemini rows to convert.')
+        warnings.warn('Aborting because there are no Gemini rows to convert.')
         return
 
     # Create TurboTax dataframe
