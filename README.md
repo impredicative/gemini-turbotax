@@ -6,11 +6,10 @@ Convert a [Gemini exchange transaction history XLSX](https://exchange.gemini.com
 * Clone this repo.
 * Ensure that [`rye`](https://rye-up.com/) is installed, available, and updated.
 * From the repo directory, run `rye sync`.
-* To convert the file, from the repo directory, run a command such as:
+* To convert the file, from the repo directory, run a command such as the following, with `--output-path` being optional and automatic:
 ```
 rye run convert --input-path=~/Downloads/transaction_history.xlsx --output-path=~/Downloads/transaction_history_turbotax.csv
 ```
-Here, `--output-path` is optional and automatic.
 
 ## Limitations
 * Grow transaction history is not supported.
