@@ -60,7 +60,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     assert (df_turbotax['Sent Amount'] > 0).all()
 
     # Write TurboTax dataframe
-    df_turbotax.to_csv(output_path)
+    df_turbotax.to_csv(output_path, index=False, date_format=config.TURBOTAX_DATETIME_FORMAT)
     print(f'Wrote TurboTax file ({output_path}) with {len(df_turbotax)} rows.')
 
 
