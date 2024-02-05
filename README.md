@@ -1,5 +1,5 @@
 # gemini-turbotax
-Convert a Gemini transaction history XLSX file to a TurboTax CSV file.
+Convert a Gemini transaction history XLSX file to a TurboTax CSV file using Python Pandas.
 
 ## Usage
 * Obtain the `transaction_history.xlsx` file from Gemini for a given tax year, e.g. from Jan 1, 2023 to Dec 31, 2023.
