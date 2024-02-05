@@ -22,7 +22,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=UserWarning, module=re.escape('openpyxl.styles.stylesheet'))
         df_gemini = pd.read_excel(input_path, engine='openpyxl')
-    print(f'Read Gemini file with {len(df_gemini)} rows.')
+    print(f'Read Gemini file ({input_path}) with {len(df_gemini)} rows.')
 
     # Filter Gemini dataframe
     num_gemini_na_rows = df_gemini['Date'].isna().sum()
@@ -57,6 +57,11 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     df_turbotax['Type'] = df_gemini['Type'].replace('Sell', 'Sale')
     df_turbotax['Sent Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), config.GEMINI_SUPPORTED_SYMBOL_SUFFIX), (lambda s: s.eq('Sell'), df_gemini['Symbol Prefix'])])
     df_turbotax['Sent Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), -df_gemini['USD Amount USD']), (lambda s: s.eq('Sell'), -df_gemini['Symbol Prefix Amount'])])
+    assert (df_turbotax['Sent Amount'] > 0).all()
+
+    # Write TurboTax dataframe
+    df_turbotax.to_csv(output_path)
+    print(f'Wrote TurboTax file ({output_path}) with {len(df_turbotax)} rows.')
 
 
 def main() -> None:  # Used as target by pyproject.toml
