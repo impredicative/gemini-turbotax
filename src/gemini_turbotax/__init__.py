@@ -58,6 +58,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     df_turbotax['Sent Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), config.GEMINI_SUPPORTED_SYMBOL_SUFFIX), (lambda s: s.eq('Sell'), df_gemini['Symbol Prefix'])])
     df_turbotax['Sent Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), -df_gemini['USD Amount USD']), (lambda s: s.eq('Sell'), -df_gemini['Symbol Prefix Amount'])])
     assert (df_turbotax['Sent Amount'] > 0).all()
+    df_turbotax['Received Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), df_gemini['Symbol Prefix']), (lambda s: s.eq('Sell'), config.GEMINI_SUPPORTED_SYMBOL_SUFFIX)])
 
     # Write TurboTax dataframe
     df_turbotax.to_csv(output_path, index=False, date_format=config.TURBOTAX_DATETIME_FORMAT)
