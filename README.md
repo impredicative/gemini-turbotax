@@ -32,3 +32,11 @@ Users are encouraged to consult with a professional tax advisor or accountant fo
 ```
 rye run convert --input-path=~/Downloads/transaction_history.xlsx --output-path=~/Downloads/transaction_history_turbotax.csv
 ```
+
+Sample status output:
+```text
+Converting ~/Downloads/transaction_history.xlsx to ~/Downloads/transaction_history_turbotax.csv.
+Read Gemini file (~/Downloads/transaction_history.xlsx) with 45 rows.
+UserWarning: Skipped 1 empty rows from the Gemini file, keeping 44 rows.
+Wrote TurboTax file (~/Downloads/transaction_history_turbotax.csv) with 44 rows.
+```
