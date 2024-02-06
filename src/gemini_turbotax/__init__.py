@@ -7,6 +7,7 @@ import pandas as pd
 import fire
 
 import gemini_turbotax.config as config
+from gemini_turbotax.util import turbotax_round as ttrnd
 
 warnings.formatwarning = lambda message, category, filename, lineno, line=None: f'{category.__name__}: {message}\n'
 
@@ -49,16 +50,19 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
 
     # Enhance Gemini dataframe
     df_gemini['Symbol Prefix'] = df_gemini['Symbol'].str.removesuffix(config.GEMINI_SUPPORTED_SYMBOL_SUFFIX)
-    df_gemini['Symbol Prefix Amount'] = df_gemini.apply(lambda row: row[row['Symbol Prefix'] + ' Amount ' + row['Symbol Prefix']], axis=1).round(config.TURBOTAX_DECIMAL_PLACES)
+    df_gemini['Symbol Prefix Amount'] = df_gemini.apply(lambda row: row[row['Symbol Prefix'] + ' Amount ' + row['Symbol Prefix']], axis=1)
 
     # Create TurboTax dataframe
     df_turbotax = pd.DataFrame()
     df_turbotax['Date'] = df_gemini['Time (UTC)']
     df_turbotax['Type'] = df_gemini['Type'].replace('Sell', 'Sale')
     df_turbotax['Sent Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), config.GEMINI_SUPPORTED_SYMBOL_SUFFIX), (lambda s: s.eq('Sell'), df_gemini['Symbol Prefix'])])
-    df_turbotax['Sent Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), -df_gemini['USD Amount USD']), (lambda s: s.eq('Sell'), -df_gemini['Symbol Prefix Amount'])])
+    df_turbotax['Sent Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), -ttrnd(df_gemini['USD Amount USD'])), (lambda s: s.eq('Sell'), -ttrnd(df_gemini['Symbol Prefix Amount']))])
     assert (df_turbotax['Sent Amount'] > 0).all()
     df_turbotax['Received Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), df_gemini['Symbol Prefix']), (lambda s: s.eq('Sell'), config.GEMINI_SUPPORTED_SYMBOL_SUFFIX)])
+    df_turbotax['Received Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), ttrnd(df_gemini['Symbol Prefix Amount'])), (lambda s: s.eq('Sell'), ttrnd(df_gemini['USD Amount USD']))])
+    df_turbotax['Fee Asset'] = config.GEMINI_SUPPORTED_SYMBOL_SUFFIX
+    df_turbotax['Fee Amount'] = -ttrnd(df_gemini['Fee (USD) USD'])
 
     # Write TurboTax dataframe
     df_turbotax.to_csv(output_path, index=False, date_format=config.TURBOTAX_DATETIME_FORMAT)
