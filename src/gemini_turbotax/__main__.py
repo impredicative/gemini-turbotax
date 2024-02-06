@@ -63,6 +63,9 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     df_turbotax['Fee Amount'] = -df_gemini['Fee (USD) USD'].astype(float)
     df_turbotax['Market Value Currency'] = config.GEMINI_SUPPORTED_SYMBOL_SUFFIX
     df_turbotax['Market Value'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), -df_gemini['USD Amount USD'] + -df_gemini['Fee (USD) USD']), (lambda s: s.eq('Sell'), df_gemini['USD Amount USD'] - -df_gemini['Fee (USD) USD'])]).astype(float)
+    df_turbotax['Description'] = df_gemini['Type'] + ' ' + df_gemini['Symbol Prefix']
+    df_turbotax['Transaction Hash'] = df_gemini['Tx Hash']
+    df_turbotax['Transaction ID'] = df_gemini['Trade ID'].astype(int)
 
     # Validate TurboTax dataframe
     number_columns = ('Sent Amount', 'Received Amount', 'Fee Amount')
