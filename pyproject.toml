@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">= 3.12"
 
 [project.scripts]
-convert = "gemini_turbotax:main"
+convert = "gemini_turbotax.__main__:main"
 
 [build-system]
 requires = ["hatchling"]
