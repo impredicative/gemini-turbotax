@@ -1,6 +1,12 @@
 # gemini-turbotax
 Convert a [Gemini exchange transaction history XLSX](https://exchange.gemini.com/settings/documents/transaction-history) file to a [TurboTax CSV](https://ttlc.intuit.com/turbotax-support/en-us/help-article/cryptocurrency/create-csv-file-unsupported-source/L1yhp71Nt_US_en_US) file using Python Pandas.
 
+## Contents
+1. [gemini-turbotax](#gemini-turbotax)
+2. [Disclaimer](#disclaimer)
+3. [Limitations](#limitations)
+4. [Usage](#usage)
+
 ## Disclaimer
 This tool, "gemini-turbotax," is provided as is, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
 
