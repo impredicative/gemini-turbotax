@@ -8,7 +8,7 @@ Convert a [Gemini exchange transaction history XLSX](https://exchange.gemini.com
 
 ## Usage
 * Obtain the Exchange `transaction_history.xlsx` file from Gemini for a given tax year, e.g. from Jan 1, 2023 to Dec 31, 2023, although historical values also can optionally be included as necessary.
-* Clone this repo.
+* Clone or download this repo.
 * Ensure that [`rye`](https://rye-up.com/) is installed, available, and updated.
 * From the repo directory, run `rye sync`.
 * To convert the file, from the repo directory, run a command such as the following, with `--output-path` being optional and automatic:
