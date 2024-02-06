@@ -7,7 +7,6 @@ import pandas as pd
 import fire
 
 import gemini_turbotax.config as config
-from gemini_turbotax.util import turbotax_round as ttrnd
 
 warnings.formatwarning = lambda message, category, filename, lineno, line=None: f'{category.__name__}: {message}\n'
 
@@ -57,11 +56,12 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     df_turbotax['Date'] = df_gemini['Time (UTC)']
     df_turbotax['Type'] = df_gemini['Type'].replace('Sell', 'Sale')
     df_turbotax['Sent Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), config.GEMINI_SUPPORTED_SYMBOL_SUFFIX), (lambda s: s.eq('Sell'), df_gemini['Symbol Prefix'])])
-    df_turbotax['Sent Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), -ttrnd(df_gemini['USD Amount USD'])), (lambda s: s.eq('Sell'), -ttrnd(df_gemini['Symbol Prefix Amount']))])
+    df_turbotax['Sent Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), -df_gemini['USD Amount USD']), (lambda s: s.eq('Sell'), -df_gemini['Symbol Prefix Amount'])]).astype(float)
     df_turbotax['Received Asset'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), df_gemini['Symbol Prefix']), (lambda s: s.eq('Sell'), config.GEMINI_SUPPORTED_SYMBOL_SUFFIX)])
-    df_turbotax['Received Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), ttrnd(df_gemini['Symbol Prefix Amount'])), (lambda s: s.eq('Sell'), ttrnd(df_gemini['USD Amount USD']))])
+    df_turbotax['Received Amount'] = df_gemini['Type'].case_when([(lambda s: s.eq('Buy'), df_gemini['Symbol Prefix Amount']), (lambda s: s.eq('Sell'), df_gemini['USD Amount USD'])]).astype(float)
     df_turbotax['Fee Asset'] = config.GEMINI_SUPPORTED_SYMBOL_SUFFIX
-    df_turbotax['Fee Amount'] = -ttrnd(df_gemini['Fee (USD) USD'])
+    df_turbotax['Fee Amount'] = -df_gemini['Fee (USD) USD'].astype(float)
+    df_turbotax['Market Value Currency'] = config.GEMINI_SUPPORTED_SYMBOL_SUFFIX
 
     # Validate TurboTax dataframe
     number_columns = ('Sent Amount', 'Received Amount', 'Fee Amount')
@@ -69,7 +69,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
         assert (df_turbotax[number_column] > 0).all(), number_column
 
     # Write TurboTax dataframe
-    df_turbotax.to_csv(output_path, index=False, date_format=config.TURBOTAX_DATETIME_FORMAT)
+    df_turbotax.to_csv(output_path, index=False, float_format='%.8f', date_format='%Y-%m-%d %H:%M:%S')
     print(f'Wrote TurboTax file ({output_path}) with {len(df_turbotax)} rows.')
 
 
