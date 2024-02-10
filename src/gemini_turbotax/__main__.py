@@ -28,7 +28,8 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     num_gemini_na_rows = df_gemini["Date"].isna().sum()
     if num_gemini_na_rows > 0:
         df_gemini.dropna(subset="Date", inplace=True)  # Removes last row which just has "USD Balance USD".
-        warnings.warn(f"Skipped {num_gemini_na_rows} empty rows from the Gemini file, keeping {len(df_gemini)} rows.")
+        printer = warnings.warn if (num_gemini_na_rows > 1) else print  # Removing 1 row is normal.
+        printer(f"Skipped {num_gemini_na_rows} empty rows from the Gemini file, keeping {len(df_gemini)} rows.")
 
     gemini_unsupported_types_mask = ~df_gemini["Type"].isin(config.GEMINI_SUPPORTED_TYPES)
     num_gemini_unsupported_type_rows = gemini_unsupported_types_mask.sum()
