@@ -16,12 +16,15 @@ convert = "gemini_turbotax.__main__:main"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.rye]
-managed = true
-dev-dependencies = []
-
 [tool.hatch.metadata]
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/gemini_turbotax"]
+
+[tool.ruff]
+line-length = 300
+
+[tool.rye]
+managed = true
+dev-dependencies = []
