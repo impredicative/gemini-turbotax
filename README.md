@@ -31,12 +31,12 @@ Wrote TurboTax file (~/Downloads/transaction_history_turbotax.csv) with 44 rows.
 ```
 
 ## Disclaimer
-This tool, "gemini-turbotax," is provided as is, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
+<sub>This tool, "gemini-turbotax," is provided as is, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.</sub>
 
-The usage of "gemini-turbotax" for converting Gemini exchange transaction history files to TurboTax CSV format is intended for informational and convenience purposes only. It does not constitute legal, tax, or financial advice. The accuracy of the generated CSV files is not guaranteed, and users are responsible for verifying the correctness of their tax documents before submission.
+<sub>The usage of "gemini-turbotax" for converting Gemini exchange transaction history files to TurboTax CSV format is intended for informational and convenience purposes only. It does not constitute legal, tax, or financial advice. The accuracy of the generated CSV files is not guaranteed, and users are responsible for verifying the correctness of their tax documents before submission.</sub>
 
-By using this tool, you acknowledge that you understand its limitations, including but not limited to the support for specific transaction types and symbols as outlined in the Limitations section of this document. You also acknowledge that you are responsible for any and all compliance with applicable laws and regulations regarding tax reporting and filing.
+<sub>By using this tool, you acknowledge that you understand its limitations, including but not limited to the support for specific transaction types and symbols as outlined in the Limitations section of this document. You also acknowledge that you are responsible for any and all compliance with applicable laws and regulations regarding tax reporting and filing.</sub>
 
-This tool is not affiliated with, endorsed, or sponsored by Gemini, TurboTax, or any related entities. Trademarks and company names mentioned herein are the property of their respective owners.
+<sub>This tool is not affiliated with, endorsed, or sponsored by Gemini, TurboTax, or any related entities. Trademarks and company names mentioned herein are the property of their respective owners.</sub>
 
-Users are encouraged to consult with a professional tax advisor or accountant for advice tailored to their specific circumstances.
+<sub>Users are encouraged to consult with a professional tax advisor or accountant for advice tailored to their specific circumstances.</sub>
