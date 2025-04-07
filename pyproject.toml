@@ -2,9 +2,9 @@
 name = "gemini-turbotax"
 version = "0.1.0"
 dependencies = [
-    "pandas>=2.0.3",
-    "fire>=0.5.0",
-    "openpyxl>=3.1.2",
+    "pandas>=2.2.3",
+    "fire>=0.7.0",
+    "openpyxl>=3.1.5",
 ]
 readme = "README.md"
 requires-python = ">= 3.13"
@@ -28,3 +28,14 @@ line-length = 300
 [tool.rye]
 managed = true
 dev-dependencies = []
+universal = true
+
+[tool.rye.scripts]  # Run as "rye run <command>"
+check = { chain = ["check-lint", "check-fmt" ] }
+"check-lint" = "rye lint"
+"check-fmt" = "rye fmt --check"
+fix = { chain = ["fix-lint", "fix-fmt" ] }
+"fix-lint" = "rye lint --fix"
+"fix-fmt" = "rye fmt"
+lockup = "rye lock --update-all"
+syncup = "rye sync --update-all"
