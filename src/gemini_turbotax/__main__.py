@@ -35,7 +35,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     num_gemini_unsupported_type_rows = gemini_unsupported_types_mask.sum()
     if num_gemini_unsupported_type_rows > 0:
         df_gemini.drop(df_gemini[gemini_unsupported_types_mask].index, inplace=True)
-        warnings.warn(f'Skipped {num_gemini_unsupported_type_rows} rows with unsupported types from the Gemini file, keeping {len(df_gemini)} rows. The supported types are: {", ".join(config.GEMINI_SUPPORTED_TYPES)}')
+        warnings.warn(f"Skipped {num_gemini_unsupported_type_rows} rows with unsupported types from the Gemini file, keeping {len(df_gemini)} rows. The supported types are: {', '.join(config.GEMINI_SUPPORTED_TYPES)}")
 
     gemini_unsupported_symbol_mask = ~df_gemini["Symbol"].str.endswith(config.GEMINI_SUPPORTED_SYMBOL_SUFFIX)
     num_gemini_unsupported_symbol_rows = gemini_unsupported_symbol_mask.sum()
