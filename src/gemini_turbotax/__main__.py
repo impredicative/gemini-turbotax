@@ -80,7 +80,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     df_turbotax["Received Asset"] = df_gemini["Type"].case_when([(lambda s: s.eq("Buy"), df_gemini["Symbol Prefix"]), (lambda s: s.eq("Sell"), config.GEMINI_SUPPORTED_SYMBOL_SUFFIX)])
     df_turbotax["Received Amount"] = df_gemini["Type"].case_when([(lambda s: s.eq("Buy"), df_gemini["Symbol Prefix Amount"]), (lambda s: s.eq("Sell"), df_gemini["USD Amount USD"])]).astype(float)
     df_turbotax["Fee Asset"] = config.GEMINI_SUPPORTED_SYMBOL_SUFFIX
-    df_turbotax["Fee Amount"] = -df_gemini["Fee (USD) USD"].astype(float)
+    df_turbotax["Fee Amount"] = -df_gemini["Fee (USD) USD"]
     df_turbotax["Market Value Currency"] = config.GEMINI_SUPPORTED_SYMBOL_SUFFIX
     df_turbotax["Market Value"] = df_gemini["Type"].case_when([(lambda s: s.eq("Buy"), -df_gemini["USD Amount USD"] + -df_gemini["Fee (USD) USD"]), (lambda s: s.eq("Sell"), df_gemini["USD Amount USD"] - -df_gemini["Fee (USD) USD"])]).astype(float)
     df_turbotax["Description"] = df_gemini["Type"] + " " + df_gemini["Symbol Prefix"]
@@ -88,9 +88,12 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     df_turbotax["Transaction ID"] = df_gemini["Trade ID"]
 
     # Validate TurboTax dataframe
-    number_columns = ("Sent Amount", "Received Amount", "Fee Amount")
-    for number_column in number_columns:
-        assert (df_turbotax[number_column] > 0).all(), number_column
+    positive_columns = ("Sent Amount", "Received Amount", "Market Value")
+    for col in positive_columns:
+        assert (df_turbotax[col] > 0).all(), (col, df_turbotax[col].min())
+    nonnegative_columns = ("Fee Amount",)
+    for col in nonnegative_columns:
+        assert (df_turbotax[col] >= 0).all(), (col, df_turbotax[col].min())
 
     # Write TurboTax dataframe
     df_turbotax.to_csv(output_path, index=False, float_format="%.8f", date_format="%Y-%m-%d %H:%M:%S")
