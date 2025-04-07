@@ -10,6 +10,7 @@ import gemini_turbotax.config as config
 
 warnings.formatwarning = lambda message, category, filename, lineno, line=None: f"{category.__name__}: {message}\n"
 
+
 def set_pandas_display_options() -> None:
     """Set pandas display options."""
     # Ref: https://stackoverflow.com/a/52432757/
@@ -20,7 +21,7 @@ def set_pandas_display_options() -> None:
     display.max_colwidth = 199
     display.width = 1000
     display.precision = 2
-    display.float_format = lambda x: '{:,.2f}'.format(x)  # Ref: https://stackoverflow.com/a/47614756/
+    display.float_format = lambda x: "{:,.2f}".format(x)  # Ref: https://stackoverflow.com/a/47614756/
 
 
 set_pandas_display_options()
@@ -36,9 +37,10 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     # Read Gemini dataframe
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=UserWarning, module=re.escape("openpyxl.styles.stylesheet"))
-        df_gemini = pd.read_excel(input_path,
-                                  dtype={"Trade ID": "UInt64", "Order ID": "UInt64"},  # Read as float64 if unspecified. Int32 and UInt32 are insufficient.
-                                  engine="openpyxl",
+        df_gemini = pd.read_excel(
+            input_path,
+            dtype={"Trade ID": "UInt64", "Order ID": "UInt64"},  # Read as float64 if unspecified. Int32 and UInt32 are insufficient.
+            engine="openpyxl",
         )
     print(f"Read Gemini file ({input_path}) with {len(df_gemini)} rows.")
 
@@ -54,7 +56,9 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     gemini_unsupported_types = df_gemini.loc[gemini_unsupported_types_mask, "Type"].unique()
     if num_gemini_unsupported_type_rows > 0:
         df_gemini.drop(df_gemini[gemini_unsupported_types_mask].index, inplace=True)
-        warnings.warn(f"Skipped {num_gemini_unsupported_type_rows} rows with unsupported types from the Gemini file, keeping {len(df_gemini)} rows. The {len(config.GEMINI_SUPPORTED_TYPES)} supported types are: {', '.join(config.GEMINI_SUPPORTED_TYPES)}. The {len(gemini_unsupported_types)} observed unsupported types are: {', '.join(gemini_unsupported_types)}.")
+        warnings.warn(
+            f"Skipped {num_gemini_unsupported_type_rows} rows with unsupported types from the Gemini file, keeping {len(df_gemini)} rows. The {len(config.GEMINI_SUPPORTED_TYPES)} supported types are: {', '.join(config.GEMINI_SUPPORTED_TYPES)}. The {len(gemini_unsupported_types)} observed unsupported types are: {', '.join(gemini_unsupported_types)}."
+        )
 
     gemini_unsupported_symbol_mask = ~df_gemini["Symbol"].str.endswith(config.GEMINI_SUPPORTED_SYMBOL_SUFFIX)
     num_gemini_unsupported_symbol_rows = gemini_unsupported_symbol_mask.sum()
