@@ -10,6 +10,21 @@ import gemini_turbotax.config as config
 
 warnings.formatwarning = lambda message, category, filename, lineno, line=None: f"{category.__name__}: {message}\n"
 
+def set_pandas_display_options() -> None:
+    """Set pandas display options."""
+    # Ref: https://stackoverflow.com/a/52432757/
+    display = pd.options.display
+
+    display.max_columns = 1000
+    display.max_rows = 10_000
+    display.max_colwidth = 199
+    display.width = 1000
+    display.precision = 2
+    display.float_format = lambda x: '{:,.2f}'.format(x)  # Ref: https://stackoverflow.com/a/47614756/
+
+
+set_pandas_display_options()
+
 
 def convert(input_path: str, output_path: Optional[str] = None) -> None:
     # Define paths
@@ -21,7 +36,10 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     # Read Gemini dataframe
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=UserWarning, module=re.escape("openpyxl.styles.stylesheet"))
-        df_gemini = pd.read_excel(input_path, engine="openpyxl")
+        df_gemini = pd.read_excel(input_path,
+                                  dtype={"Trade ID": "UInt64", "Order ID": "UInt64"},  # Read as float64 if unspecified. Int32 and UInt32 are insufficient.
+                                  engine="openpyxl",
+        )
     print(f"Read Gemini file ({input_path}) with {len(df_gemini)} rows.")
 
     # Filter Gemini dataframe
@@ -66,7 +84,7 @@ def convert(input_path: str, output_path: Optional[str] = None) -> None:
     df_turbotax["Market Value"] = df_gemini["Type"].case_when([(lambda s: s.eq("Buy"), -df_gemini["USD Amount USD"] + -df_gemini["Fee (USD) USD"]), (lambda s: s.eq("Sell"), df_gemini["USD Amount USD"] - -df_gemini["Fee (USD) USD"])]).astype(float)
     df_turbotax["Description"] = df_gemini["Type"] + " " + df_gemini["Symbol Prefix"]
     df_turbotax["Transaction Hash"] = df_gemini["Tx Hash"]
-    df_turbotax["Transaction ID"] = df_gemini["Trade ID"].astype(int)
+    df_turbotax["Transaction ID"] = df_gemini["Trade ID"]
 
     # Validate TurboTax dataframe
     number_columns = ("Sent Amount", "Received Amount", "Fee Amount")
