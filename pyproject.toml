@@ -23,7 +23,7 @@ allow-direct-references = true
 packages = ["src/gemini_turbotax"]
 
 [tool.ruff]
-line-length = 300
+line-length = 320
 
 [tool.rye]
 managed = true
