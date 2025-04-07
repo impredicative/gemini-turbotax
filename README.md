@@ -13,7 +13,7 @@ Convert a [Gemini exchange transaction history XLSX](https://exchange.gemini.com
 * **Symbol** column: Only values ending in "USD" are supported. Others are skipped.
 
 ## Usage
-* Obtain the Exchange `transaction_history.xlsx` file from Gemini for a given tax year, e.g. from Jan 1, 2023 to Dec 31, 2023, although historical values also can optionally be included as necessary.
+* Obtain the Exchange `transaction_history.xlsx` file from Gemini for a given tax year, e.g. from Jan 1, 2024 to Dec 31, 2024, although historical values such as from Jan 1, 2015 also can optionally be included as necessary.
 * Clone or download this repo.
 * Ensure that [`rye`](https://rye-up.com/) is installed, available, and updated.
 * From the repo directory, run `rye sync` or more narrowly just `rye sync --no-lock` if on Linux.
