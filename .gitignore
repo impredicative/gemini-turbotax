@@ -159,8 +159,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
-# Transaction input
-*.xlsx
+# Mac
+.DS_Store
 
-# Transaction output
+# Transaction files
+*.xlsx
 *.csv
+*.pdf
