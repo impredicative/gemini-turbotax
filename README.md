@@ -16,17 +16,29 @@ Convert a [Gemini exchange transaction history XLSX](https://exchange.gemini.com
 * Obtain the Exchange `transaction_history.xlsx` file from Gemini for a given tax year, e.g. from Jan 1, 2024 to Dec 31, 2024, although historical values such as from Jan 1, 2015 also can optionally be included as necessary. Historical values are of course strictly necessary if buys were made in prior years for positions held in the relevant year.
 * Clone or download this repo.
 * Build and provision the defined devcontainer - this is the preferred way. Alternatively, ensure that [`rye`](https://rye-up.com/) is installed, available, and updated, then run `rye sync` or more narrowly just `rye sync --no-lock` if on Linux.
-* To convert the file, from the repo directory, run a command such as the following, with `--output-path` being optional and automatic:
+* To convert the file, from the repo directory, run a command such as the following
 ```
-rye run convert --input-path=~/Downloads/transaction_history.xlsx --output-path=~/Downloads/transaction_history_turbotax.csv
+rye run convert --input-path=~/Downloads/transaction_history.xlsx --year=2024 --output-format=web|desktop --output-path=~/Downloads/transaction_history_turbotax.csv
 ```
 
-Sample status output:
+Sample status output for `--output-format=web`:
 ```text
-Converting ~/Downloads/transaction_history.xlsx to ~/Downloads/transaction_history_turbotax.csv.
-Read Gemini file (~/Downloads/transaction_history.xlsx) with 45 rows.
-UserWarning: Skipped 1 empty rows from the Gemini file, keeping 44 rows.
-Wrote TurboTax file (~/Downloads/transaction_history_turbotax.csv) with 44 rows.
+Read Gemini file (transaction_history.xlsx) with 260 rows.
+Skipped 1 empty rows from the Gemini file, keeping 259 rows.
+UserWarning: Skipped 73 rows with unsupported types from the Gemini file, keeping 186 rows. The 2 supported types are: Buy, Sell. The 2 observed unsupported types are: Credit, Debit.
+UserWarning: Filtering by year is not performed for TurboTax web.
+Wrote 2024 TurboTax web file (transaction_history_turbotax-web_2024.csv) with 186 rows.
+```
+
+Sample status output for `--output-format=desktop`:
+```
+Read Gemini file (transaction_history.xlsx) with 260 rows.
+Skipped 1 empty rows from the Gemini file, keeping 259 rows.
+UserWarning: Skipped 73 rows with unsupported types from the Gemini file, keeping 186 rows. The 2 supported types are: Buy, Sell. The 2 observed unsupported types are: Credit, Debit.
+UserWarning: No buy lot was found for 40.35000000 GUSD sold on 2021-11-09 for 40.35, so a same-year purchase date of 2021-01-01 and a cost basis of 0.01 are used to prevent TurboTax validation errors.
+UserWarning: No buy lot was found for 0.02245847 PAXG sold on 2024-06-21 for 42.69, so a same-year purchase date of 2024-01-01 and a cost basis of 0.01 are used to prevent TurboTax validation errors.
+Filtered 131 output rows for all years to 9 output rows for the year 2024.
+Wrote 2024 TurboTax desktop file (transaction_history_turbotax-desktop_2024.csv) with 9 rows.
 ```
 
 ## Disclaimer
