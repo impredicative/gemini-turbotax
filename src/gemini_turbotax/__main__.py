@@ -151,6 +151,7 @@ def _convert_turbotax_web_to_desktop(df_turbotax_web: pd.DataFrame) -> pd.DataFr
 
                         purchase_date = pd.Timestamp(year=date.year, month=1, day=1)  # Prevents TurboTax validation error with value of pd.NaT.
                         cost_basis = 0.01  # Prevents TurboTax validation error with value of 0.0 or 0.000_000_01.
+                        # Note: The proceeds are intentionally not incremented by the cost basis to avoid breaking standard auditability.
                         result_row: ResultRow = {"Currency Name": asset, "Purchase Date": purchase_date, "Cost Basis": cost_basis, "Date Sold": date, "Proceeds": proceeds}
                         if result_row["Proceeds"] > 0:
                             warnings.warn(f"No buy lot was found for {unmatched_qty:.8f} {asset} sold on {date.strftime('%Y-%m-%d')} for {proceeds:.2f}, so a same-year purchase date of {purchase_date.strftime('%Y-%m-%d')} and a cost basis of {cost_basis:.2f} are used to prevent TurboTax validation errors.")
